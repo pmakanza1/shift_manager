@@ -79,9 +79,13 @@
                 </div>
             </div>
 
-            <div class="flex flex-col w-1/3">
+            <div class="flex w-1/3"></div>
+        </div>
+
+        <div class="flex flex-row w-2/3 gap-x-14 pb-6 items-center items-stretch">
+            <div class="flex flex-col w-1/5">
                 <label for="rate">Rate</label>
-                <input class="w-1/4" id="rate" name="rate" type="number" wire:model="rate" />
+                <input class="" id="rate" name="rate" type="number" wire:model="rate" />
 
                 <div>
                     @error('rate')
@@ -89,7 +93,21 @@
                     @enderror
                 </div>
             </div>
+
+            <div class="flex flex-col w-1/5">
+                <label for="breakHours">Break (Hours)</label>
+                <input placeholder="0.5" class="" id="breakHours" type="number" name="breakHours"
+                    wire:model="breakHours" />
+
+                <div>
+                    @error('breakHours')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
         </div>
+
+        {{-- <div class="flex flex-col w-1/3"></div> --}}
 
         <div class="px-1 border border-black">
             <p class="font-medium">Assign same shift for the following days:</p>
@@ -104,25 +122,21 @@
             </div>
 
             <div class="py-2">
-                <div>
-                    <input type="radio" id="week" name="shiftOccurence" value="weekly"
-                        wire:model.live="shiftOccurence" />
+                <div class="text-gray-500">
+                    <input class="text-gray-500" type="radio" id="week" name="shiftOccurence" value="weekly"
+                        wire:model.live="shiftOccurence" disabled />
                     <label for="week">This Week</label>
                 </div>
 
-                <div>
-                    <input type="radio" id="month" name="shiftOccurence" value="monthly"
-                        wire:model.live="shiftOccurence" />
+                <div class="text-gray-500">
+                    <input class="text-gray-500" type="radio" id="month" name="shiftOccurence" value="monthly"
+                        wire:model.live="shiftOccurence" disabled />
                     <label for="month">This month</label>
                 </div>
 
                 @error('shiftOccurence')
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
-
-                @error('note')
-                <span class="text-red-500">{{ $message }}</span>
-            @enderror
             </div>
         </div>
 
@@ -155,6 +169,10 @@
                             <textarea class="resize-none w-full" name="note" wire:model="note" id="" cols="10" rows="5"
                                 placeholder="Please enter reason for overwriting shift"></textarea>
                         </div>
+
+                        @error('note')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     @endif
 
                     <div class="flex gap-x-2 py-3 font-semibold">
@@ -174,7 +192,13 @@
             Estimated Gross Earnings: {{ $estimatedEarnings }}
         </div>
 
-        <div class="bg-blue-500 p-1 mt-6 text-white w-fit" wire:click="calculateHoursAndPay">
+        @if($shiftTooLong)
+            <div class="bg-red-200 bg-red-200 text-center font-medium py-2">
+                <span class="text-red-700">Shift should not exceed 12 hours</span>
+            </div>
+        @endif
+
+        <div class="bg-blue-500 p-1 mt-6 text-white w-fit" wire:click="createShift">
             <button type="button">Confirm</button>
         </div>
     </form>

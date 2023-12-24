@@ -17,14 +17,14 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="h-screen w-full flex flex-row">
-        <div class="w-1/5 bg-white shadow">
+    <div class="h-full w-full flex flex-row">
+        <div class="w-1/5 bg-blue-100 shadow">
             @include('layouts.navigation')
         </div>
 
         <div class="h-full w-full flex flex-col">
 
-            <div class="flex justify-between items-center px-2 py-4 bg-white">
+            <div class="flex justify-between items-center px-2 py-4 bg-blue-100">
                 <div>
                     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                         {{ __('Dashboard') }}
@@ -74,15 +74,15 @@
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-1">
+                <header class="bg-blue-200">
+                    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-1">
                         {{ $header }}
                     </div>
                 </header>
             @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="bg-white h-full">
                 {{ $slot }}
             </main>
         </div>

@@ -12,9 +12,10 @@ class CompaniesController extends Controller
      */
     public function index()
     {
-        $companies = Company::where('is_active', 1)->get();
+        // $companies = Company::where('is_active', 1)->get();
+        return view('companies.companies');
 
-        return view('companies.companies')->with('companies', $companies);
+        // return view('companies.companies')->with('companies', $companies);
     }
 
     /**
@@ -36,9 +37,9 @@ class CompaniesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        return view('companies.companies-list');
     }
 
     /**

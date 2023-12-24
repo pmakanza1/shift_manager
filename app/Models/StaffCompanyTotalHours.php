@@ -32,9 +32,14 @@ class StaffCompanyTotalHours extends Model
         return $this->hasOne(Company::class, 'id', 'company_id');
     }
 
+    // public function lastUpdatedBy()
+    // {
+    //     return $this->hasOne(User::class, 'staff_id', 'last_updated_by');
+    // }
+
     public function lastUpdatedBy()
     {
-        return $this->hasOne(User::class, 'staff_id', 'last_updated_by');
+        return $this->hasOne(User::class, 'id', 'last_updated_by');
     }
 
 }

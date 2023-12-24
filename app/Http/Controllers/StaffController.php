@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\ShiftType;
 use App\Models\Staff;
+use App\Models\StaffCompanyTotalHours;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
@@ -14,9 +15,23 @@ class StaffController extends Controller
      */
     public function index()
     {
-        $staff = Staff::where('is_active', 1)->get();
+        // $cancelled_shifts = StaffCompanyTotalHours::where('as_planned', 0)
+        //     ->select('staff_id')
+        //     ->selectRaw('sum(total_hours) as cancelled_hours')
+        //     ->groupBy('staff_id');
 
-        return view('staff.staff')->with('staff', $staff);
+        // // $staff = Staff::where('is_active', 1)->get();
+
+        // $staff = Staff::leftJoin('staff_company_total_hours AS scth', 'scth.staff_id', 'staff.staff_id')
+        //     ->leftJoinSub($cancelled_shifts, 'cancelled_shifts', function($join){
+        //         $join->on('cancelled_shifts.staff_id', '=', 'staff.staff_id');
+        //     })
+        //     ->select('staff.staff_id', 'staff.name', 'staff.email', 'staff.phone', 'cancelled_shifts.cancelled_hours')
+        //     ->selectRaw('sum(total_hours) as total_hours, sum(total_hours * rate) as total_earnings')
+        //     ->groupBy('staff.staff_id', 'staff.name', 'staff.email', 'staff.phone', 'cancelled_shifts.cancelled_hours')
+        //     ->get();
+
+        return view('staff.staff');
     }
 
     /**

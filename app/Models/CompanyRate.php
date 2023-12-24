@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompanyRate extends Model
 {
+    protected $fillable = ['shift_type_id', 'rate', 'effective_date'];
+    
     use HasFactory;
+
+    public function shiftType()
+    {
+        return $this->hasOne(ShiftType::class, 'id', 'shift_type_id');
+    }
 }

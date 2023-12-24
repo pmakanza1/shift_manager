@@ -21,19 +21,36 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    if(auth()->user()->is_admin){
+        return view('dashboard');
+    }
+    else{
+        return redirect()->route('staff.show', auth()->user()->staff);
+    }
+    
+})->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->group(function(){
+    Route::get('/company-hours', [CompaniesController::class, 'index'])->name('companies.index');
+    Route::get('/companies', [CompaniesController::class, 'show'])->name('companies.show');
+
+    Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+});
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/companies', [CompaniesController::class, 'index'])->name('companies.index');
+    // Route::get('/staff/{staff}', function($staff){
+    //     dd($staff);
+    // })->name('dummy');
 
-    Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
-
-    Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show');
+    Route::get('/staff/{staff}', [StaffController::class, 'show'])->name('staff.show')->middleware('staff.owner');
 });
 
 require __DIR__.'/auth.php';

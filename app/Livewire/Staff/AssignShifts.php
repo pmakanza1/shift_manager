@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\ShiftType;
 use App\Models\StaffCompanyTotalHours;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
 class AssignShifts extends Component
@@ -32,6 +33,10 @@ class AssignShifts extends Component
     public bool $saveSuccess = false;
     public $noteRequired;
     public $note;
+    public $singleShiftHours;
+    public $actualWorkingHours;
+    public $breakHours = 0;
+    public $shiftTooLong = false;
 
     protected $rules = [
         'company' => 'required',
@@ -41,8 +46,8 @@ class AssignShifts extends Component
         'startTime' => 'required',
         'endTime' => 'required',
         'rate' => 'required',
-        'shiftOccurence' => 'required',
-        'note' => 'sometimes|required|min:5'
+        'breakHours' => 'required',
+        // 'shiftOccurence' => 'required',
     ];
 
     protected $listeners = ['refresh' => '$refresh'];
@@ -63,33 +68,29 @@ class AssignShifts extends Component
         ];
     }
 
-    // public function updatedEndDate()
-    // {
-    //     $this->validateOnly('startDate');
-
-    //     $shiftStartDay = Carbon::parse($this->startDate)->englishDayOfWeek;
-
-    //     array_push($this->selectedDays, $shiftStartDay);
-
-    //     // $this->showWeekDays = true;
-    // }
-
-    // public function selectableDays()
-    // {
-    //     $this->getCarbonDates();
-    //     // dd($this->startDateTime);
-    // }
-
     public function getCarbonDates()
     {
         $this->startDateTime = Carbon::parse($this->startDate)->setTimeFromTimeString($this->startTime);
         $this->endDateTime = Carbon::parse($this->endDate)->setTimeFromTimeString($this->endTime);
+        $this->singleShiftHours = $this->startDateTime->floatDiffInHours($this->endDateTime);
+
+        if(($this->singleShiftHours - $this->breakHours) > 12){
+            // $this->addError('shiftTooLong', 'Shift should not exceed 12 hours');
+            $this->shiftTooLong = true;
+        }
+        // $this->singleShiftHours;
+        $this->calculateActualWorkingHours();
+    }
+
+    private function calculateActualWorkingHours()
+    {
+        $this->actualWorkingHours = $this->singleShiftHours - $this->breakHours;
     }
 
     public function checkShiftClashes()
     {
         $from = Carbon::today();
-        $to = Carbon::now()->endOfMonth();
+        $to = Carbon::today()->addMonth();
 
         $potentialClashes = StaffCompanyTotalHours::whereBetween('start_date', [$from, $to])
             ->where('staff_id', $this->staff->staff_id)
@@ -117,18 +118,13 @@ class AssignShifts extends Component
         return false;
     }
 
-    public function calculateHoursAndPay()
+    public function createShift()
     {
-        $this->resetErrorBag();
+        $this->shiftTooLong = false;
         $this->validate();
         $this->getCarbonDates();
-
-        if ($this->startDateTime->greaterThanOrEqualTo($this->endDateTime)) {
-            $this->addError('times', 'Please check your shift start and end times.');
-            return;
-        }
-
-        if($this->checkShiftClashes()){
+        
+        if($this->shiftTooLong){
             return;
         }
 
@@ -138,20 +134,35 @@ class AssignShifts extends Component
             array_push($this->selectedDays, $shiftStartDay);
         }
 
-        // dd($this->selectedDays);
+        $singleShiftToMinutes = $this->singleShiftHours * 60;
 
-        //recurrence
-        //if weekly then go through selected days, get dates for those days, save shifts
+        foreach ($this->selectedDays as $selectedDay) {
+            if (Carbon::parse($selectedDay)->dayOfWeek >= Carbon::parse($this->startDate)->dayOfWeek) {
+                $this->startDateTime = Carbon::parse($selectedDay)->setTimeFromTimeString($this->startTime);
+                $this->endDateTime = Carbon::parse($selectedDay)->setTimeFromTimeString($this->startTime)
+                    ->addMinutes(round($singleShiftToMinutes, 1));
 
-        //if monthly go through selected days, get dates for those days, save shifts
+                $this->calculateHoursAndPay();
+            }
+        }
+    }
 
-        // if ($this->shiftOccurence == 'weekly') {
-        //     foreach($this->selectedDays as $selectedDay){
+    private function calculateHoursAndPay()
+    {
+        $this->resetErrorBag();
 
-        //     }
-        // }
+        if ($this->startDateTime->greaterThanOrEqualTo($this->endDateTime)) {
+            $this->addError('times', 'Please check your shift start and end times.');
+            return;
+        }
 
-        $this->plannedHours = Carbon::parse($this->startDateTime)->floatDiffInHours(Carbon::parse($this->endDateTime));
+        if ($this->checkShiftClashes()) {
+            return;
+        }
+
+        // $this->singleShiftHours -= $this->breakHours;
+        // $this->plannedHours += $this->singleShiftHours;
+        $this->plannedHours += $this->actualWorkingHours;
         $this->estimatedEarnings = $this->rate * $this->plannedHours;
         $this->save();
     }
@@ -162,15 +173,36 @@ class AssignShifts extends Component
         //add note to shift - reason for cancelling
         //create new shift
 
-        // dd($this->clashingShift);
+        $this->plannedHours = 0;
+
+        $this->noteRequired = true;
+
+        $validateNote = Validator::make(
+            ['note' => $this->note],
+            ['note' => 'required|min:5'],
+            ['required' => 'The :attribute field is required'],
+        )->validate();
+
         $this->clashingShift->as_planned = 0;
         $this->clashingShift->save();
-        $this->noteRequired = true;
+
+        $this->calculateHoursAndPay();
+        $this->noteRequired = false;
+        $this->clashingShift = null;
+        $this->note = null;
+
     }
 
     public function clearProps()
     {
-        $this->resetExcept(['staff', 'companies', 'shiftTypes', 'weekDays']);
+        $this->resetExcept([
+            'staff',
+            'companies',
+            'shiftTypes',
+            'weekDays',
+            // 'plannedHours',
+            // 'estimatedEarnings'
+        ]);
     }
 
     public function save()
@@ -182,11 +214,12 @@ class AssignShifts extends Component
                 'shift_type_id' => $this->shiftType,
                 'start_date' => $this->startDateTime,
                 'end_date' => $this->endDateTime,
-                'total_hours' => $this->plannedHours,
+                // 'total_hours' => $this->singleShiftHours,
+                'total_hours' => $this->actualWorkingHours,
                 'rate' => $this->rate,
                 'as_planned' => 1,
                 'note' => $this->note ?? null,
-                'last_updated_by' => auth()->user()->staff_id,
+                'last_updated_by' => auth()->user()->id,
             ]
         );
 
