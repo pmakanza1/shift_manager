@@ -16,6 +16,8 @@ class AddCompany extends Component
     public $weekendRate;
     public $success = false;
 
+    protected $listeners = ['refreshCompanies' => '$refresh'];
+
     protected $rules = [
         'name' => 'required',
         'email' => 'required|email',
@@ -47,7 +49,7 @@ class AddCompany extends Component
         }
 
         $this->success = true;
-        $this->emit('refreshCompanies');
+        $this->dispatch('refreshCompanies');
     }
 
     public function render()

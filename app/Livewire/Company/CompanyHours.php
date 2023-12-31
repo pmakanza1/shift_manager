@@ -28,12 +28,6 @@ class CompanyHours extends Component
             $this->filterEndDate,
             $this->searchTerm
         )->get();
-
-        // dd($this->companyHours);
-
-        // $this->wrapDataAsCompany();
-
-        // DD($this->companyHours);
     }
 
     public function filter()

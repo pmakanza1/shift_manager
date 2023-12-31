@@ -15,4 +15,19 @@ class Company extends Model
     {
         return $this->hasMany(CompanyRate::class, 'company_id', 'id');
     }
+
+    public function getDayRateAttribute()
+    {
+        return $this->companyRates()->where('shift_type_id', 2)->first()->rate ?? null;
+    }
+
+    public function getNightRateAttribute()
+    {
+        return $this->companyRates()->where('shift_type_id', 1)->first()->rate ?? null;
+    }
+
+    public function getWeekendRateAttribute()
+    {
+        return $this->companyRates()->where('shift_type_id', 3)->first()->rate ?? null;
+    }
 }

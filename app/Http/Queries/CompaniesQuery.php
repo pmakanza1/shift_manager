@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class CompaniesQuery
 {
-    public static function comapniesWithRates($searchTerm)
+    public static function companiesWithRates($searchTerm)
     {
         $subQuery = Company::join('company_rates as cr', 'cr.company_id', 'companies.id')
             ->select('companies.name', 'cr.company_id', 'companies.phone', 'companies.email')

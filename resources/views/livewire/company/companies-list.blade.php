@@ -1,4 +1,4 @@
-<div x-data="{ addCompany: false }" class="px-3">
+<div x-data="{ addCompany: false }" class="px-3 relative">
     <div class="flex items-center justify-between gap-x-2 py-3">
         <div class="w-full">
             <input wire:model.live="searchTerm" name="searchTerm" class="border border-gray-300 rounded w-full"
@@ -11,6 +11,14 @@
 
     <div x-show="addCompany" @click.outside="addCompany=false">
         <livewire:company.add-company />
+    </div>
+
+    <div>
+        @if ($company)
+            <div @click.outside="$wire.clearCompanyId" class="absolute inset-x-0 bg-gray-200 shadow-sm p-4 mx-2">
+                <livewire:company.edit-company :company="$company" />
+            </div>
+        @endif
     </div>
 
     <div class="flex flex-col overflow-auto w-full">
@@ -26,7 +34,8 @@
         <div class="flex flex-col overflow-auto w-full">
             @foreach ($companies as $company)
                 <div class="flex w-full bg-blue-200 py-2 px-1 mb-2 rounded">
-                    <div class="w-3/12 font-semibold">{{ $company->name }}</div>
+                    <div wire:click="setCompanyId({{ $company->company_id }})" class="w-3/12 font-semibold cursor-pointer">
+                        {{ $company->name }}</div>
                     <div class="w-3/12">{{ $company->email }}</div>
                     <div class="w-3/12">{{ $company->phone }}</div>
                     {{-- <div class="w-2/12">{{ $company->rate }}</div> --}}

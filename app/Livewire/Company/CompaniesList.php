@@ -12,28 +12,39 @@ class CompaniesList extends Component
 {
     public $companies;
     public $searchTerm;
+    public $company;
 
-    protected $listeners = ['refreshCompanies' => '$refresh'];
+    protected $listeners = ['refreshCompanies', 'closeEditBox' => 'clearCompanyId'];
 
     public function mount()
     {
-        $this->companies = CompaniesQuery::comapniesWithRates($this->searchTerm)->get();
-        // dd($this->companyHours);
+        $this->companies = CompaniesQuery::companiesWithRates($this->searchTerm)->get();
+    }
 
-        // $this->wrapDataAsCompany();
-
-        // DD($this->companyHours);
+    public function refreshCompanies()
+    {
+        $this->companies = CompaniesQuery::companiesWithRates($this->searchTerm)->get();
     }
 
     public function updatedSearchTerm()
     {
         if(strlen($this->searchTerm) >= 3){
-            $this->companies = CompaniesQuery::comapniesWithRates($this->searchTerm)->get();
+            $this->companies = CompaniesQuery::companiesWithRates($this->searchTerm)->get();
         }
 
         if(strlen($this->searchTerm) < 3){
-            $this->companies = CompaniesQuery::comapniesWithRates('')->get();
+            $this->companies = CompaniesQuery::companiesWithRates('')->get();
         }
+    }
+
+    public function setCompanyId($id = null)
+    {
+        $this->company = Company::find($id);
+    }
+
+    public function clearCompanyId()
+    {
+        $this->company = null;
     }
 
     public function render()

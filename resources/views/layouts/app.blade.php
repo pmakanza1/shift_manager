@@ -17,19 +17,25 @@
 </head>
 
 <body class="font-sans antialiased">
+    <div>
+        @include('layouts.mobile-navigation')
+    </div>
+
     <div class="h-full w-full flex flex-row">
-        <div class="w-1/5 bg-blue-100 shadow">
+        <div class="md:w-1/5 md:bg-blue-100 md:shadow">
             @include('layouts.navigation')
         </div>
 
         <div class="h-full w-full flex flex-col">
 
-            <div class="flex justify-between items-center px-2 py-4 bg-blue-100">
-                <div>
-                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                        {{ __('Dashboard') }}
-                    </h2>
-                </div>
+            <div class="flex justify-between items-center px-2 py-6 bg-blue-100">
+                @if (auth()->user()->is_admin)
+                    <div>
+                        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                            {{ __('Dashboard') }}
+                        </h2>
+                    </div>
+                @endif
 
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6 absolute right-1">
