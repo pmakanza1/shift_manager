@@ -3,12 +3,15 @@
 namespace App\Http\Queries;
 
 use App\Models\Company;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CompanyHoursQuery
 {
     public static function getCompanyHours($startDate, $endDate)
     {
+        $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
+
         return Company::leftJoin('staff_company_total_hours AS scth', function ($join) {
             $join->on('scth.company_id', 'companies.id')
                 ->where('as_planned', 1);
@@ -29,6 +32,7 @@ class CompanyHoursQuery
     public static function groupedActualCompanyHours($startDate, $endDate, $searchTerm)
     {
         // dd(self::getCompanyHours($startDate, $endDate)->get());
+        $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
         return DB::connection('mysql')
             ->query()
             ->fromSub(self::getCompanyHours($startDate, $endDate), 'companyHours')

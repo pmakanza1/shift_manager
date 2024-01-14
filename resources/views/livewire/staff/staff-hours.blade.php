@@ -89,7 +89,7 @@
                     class="flex flex-col space-y-2 md:space-y-0 overflow-auto md:flex-row w-full {{ $this->getBackground($stf->confirmed) }} py-2 px-1 mb-2 rounded">
                     <div class="md:w-3/12 flex font-semibold gap-x-2">
                         <div class="md:hidden">Name:</div>
-                        <a href="{{ route('staff.show', $stf->staff_id) }}">{{ $stf->name }}</a>
+                        <a class="text-indigo-500" href="{{ route('staff.show', $stf->staff_id) }}">{{ $stf->name }}</a>
                     </div>
                     <div class="md:w-3/12 flex gap-x-2">
                         <div class="font-semibold md:hidden">Email:</div>

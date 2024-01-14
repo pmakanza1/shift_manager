@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <div class="flex w-full justify-between gap-x-2">
+    <div class="flex flex-col md:flex-row w-full justify-between gap-x-2">
         <div class="flex flex-col w-full">
             <label class="" for="coName">Company Name</label>
             <input class="w-full" id="coName" name="name" wire:model="name" type="text"
@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="flex w-full justify-between gap-x-2">
+    <div class="flex flex-col md:flex-row w-full justify-between gap-x-2">
         <div class="flex flex-col w-full">
             <label for="dayRate">Day Rate</label>
             <input type="number" name="dayRate" wire:model="dayRate" placeholder="Day Rate" />

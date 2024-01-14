@@ -11,9 +11,9 @@
 
     <div class="text-sm py-3 font-medium">Assign Shifts to {{ $staff->name }}</div>
 
-    <form action="">
-        <div class="flex gap-x-5">
-            <div class="w-1/3">
+    <form class="" action="">
+        <div class="flex flex-col md:flex-row gap-x-5 space-y-2 md:space-y-0">
+            <div class="w-full lg:w-1/3">
                 <select class="w-full" name="company" id="" wire:model="company">
                     <option value="">Select Company</option>
                     @foreach ($companies as $company)
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="w-1/3">
+            <div class="w-full lg:w-1/3">
                 <select class="w-full" class="flex w-1/3" name="shiftType" id="" wire:model="shiftType">
                     <option value="">Select Shift Type</option>
                     @foreach ($shiftTypes as $shiftType)
@@ -46,12 +46,12 @@
             <div class="w-1/3"></div>
         </div>
 
-        <div class="flex gap-x-5 my-6">
-            <div class="flex flex-col w-1/3">
+        <div class="flex flex-col lg:flex-row gap-x-5 my-6">
+            <div class="flex flex-col w-full lg:w-1/3">
                 <label for="startDate">Start</label>
                 <div class="flex justify-between gap-x-1">
-                    <input class="w-2/3" id="startDate" name="startDate" type="date" wire:model.live="startDate" />
-                    <input class="w-1/3" type="time" name="startTime" wire:model.live="startTime" />
+                    <input class="w-full lg:w-2/3" id="startDate" name="startDate" type="date" wire:model.live="startDate" />
+                    <input class="w-full lg:w-1/3" type="time" name="startTime" wire:model.live="startTime" />
                 </div>
 
                 <div>
@@ -65,11 +65,11 @@
                 </div>
             </div>
 
-            <div class="flex flex-col w-1/3">
+            <div class="flex flex-col w-full lg:w-1/3">
                 <label for="endDate">End</label>
                 <div class="flex justify-between gap-x-1">
-                    <input class="w-2/3" id="endDate" name="endDate" type="date" wire:model.live="endDate" />
-                    <input class="w-1/3" type="time" name="endTime" wire:model.live="endTime" />
+                    <input class="w-full lg:w-2/3" id="endDate" name="endDate" type="date" wire:model.live="endDate" />
+                    <input class="w-full lg:w-1/3" type="time" name="endTime" wire:model.live="endTime" />
                 </div>
 
                 <div>
@@ -82,8 +82,8 @@
             <div class="flex w-1/3"></div>
         </div>
 
-        <div class="flex flex-row w-2/3 gap-x-14 pb-6 items-center items-stretch">
-            <div class="flex flex-col w-1/5">
+        <div class="flex flex-row w-full lg:w-2/3 gap-x-2 lg:gap-x-14 pb-6 items-center items-stretch">
+            <div class="flex flex-col w-full lg:w-1/5">
                 <label for="rate">Rate</label>
                 <input class="" id="rate" name="rate" type="number" wire:model="rate" />
 
@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col w-1/5">
+            <div class="flex flex-col w-full lg:w-1/5">
                 <label for="breakHours">Break (Hours)</label>
                 <input placeholder="0.5" class="" id="breakHours" type="number" name="breakHours"
                     wire:model="breakHours" />

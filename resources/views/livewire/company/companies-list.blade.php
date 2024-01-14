@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div x-show="addCompany" @click.outside="addCompany=false">
+    <div x-cloak x-show="addCompany" @click.outside="addCompany=false">
         <livewire:company.add-company />
     </div>
 
@@ -21,8 +21,8 @@
         @endif
     </div>
 
-    <div class="flex flex-col overflow-auto w-full">
-        <div class="flex bg-blue-500 text-white text-sm items-center font-semibold w-full p-1">
+    <div class="flex flex-col w-full">
+        <div class="hidden md:flex bg-blue-500 text-white text-sm items-center font-semibold w-full p-1">
             <p class="w-3/12">Name</p>
             <p class="w-3/12">Email</p>
             <p class="w-3/12">Phone</p>
@@ -31,18 +31,39 @@
             <p class="w-1/12">Weekend</p>
         </div>
 
-        <div class="flex flex-col overflow-auto w-full">
+        <div class="flex flex-col w-full">
             @foreach ($companies as $company)
-                <div class="flex w-full bg-blue-200 py-2 px-1 mb-2 rounded">
-                    <div wire:click="setCompanyId({{ $company->company_id }})" class="w-3/12 font-semibold cursor-pointer">
-                        {{ $company->name }}</div>
-                    <div class="w-3/12">{{ $company->email }}</div>
-                    <div class="w-3/12">{{ $company->phone }}</div>
+                <div class="flex flex-col md:flex-row space-y-1 md:space-y-0 w-full bg-blue-200 py-2 px-1 mb-2 rounded">
+                    <div wire:click="setCompanyId({{ $company->company_id }})" class="flex gap-x-2 md:w-3/12 font-semibold cursor-pointer">
+                        <div class="md:hidden">Name: </div>
+                        <span class="text-indigo-500">{{ $company->name }}</span>
+                    </div>
+
+                    <div class="flex gap-x-2 md:w-3/12">
+                        <div class="md:hidden font-semibold">Email:</div>
+                        {{ $company->email }}
+                    </div>
+
+                    <div class="flex gap-x-2 md:w-3/12">
+                        <div class="font-semibold md:hidden">Phone:</div>
+                        {{ $company->phone }}
+                    </div>
                     {{-- <div class="w-2/12">{{ $company->rate }}</div> --}}
 
-                    <div class="w-1/12">{{ $company->dayRate }}</div>
-                    <div class="w-1/12">{{ $company->nightRate }}</div>
-                    <div class="w-1/12">{{ $company->weekendRate }}</div>
+                    <div class="flex gap-x-2 md:w-1/12">
+                        <div class="font-semibold md:hidden">Day:</div>
+                        {{ $company->dayRate }}
+                    </div>
+
+                    <div class="flex gap-x-2 md:w-1/12">
+                        <div class="font-semibold md:hidden">Night:</div>
+                        {{ $company->nightRate }}
+                    </div>
+
+                    <div class="flex gap-x-2 md:w-1/12">
+                        <div class="font-semibold md:hidden">Weekend:</div>
+                        {{ $company->weekendRate }}
+                    </div>
                 </div>
             @endforeach
         </div>

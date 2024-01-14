@@ -72,40 +72,53 @@
         </div>
 
         @foreach ($staffHours as $staffShift)
-            <div class="p-1 border-b even:bg-blue-50 flex items-center w-full">
+            <div class="p-1 border-b even:bg-blue-50 flex flex-col items-center w-full">
                 <div class="w-full py-2">
-                    <div class="flex font-semibold">
+                    <div class="hidden md:flex font-semibold">
                         <p class="w-1/3">Company</p>
                         <p class="w-1/3">Starting</p>
                         <p class="w-1/3">Ending</p>
                     </div>
 
-                    <div class="flex items-center">
-                        <p class="w-1/3">{{ $staffShift->company }}</p>
-                        <p class="w-1/3">{{ $staffShift->start_date }}</p>
-                        <p class="w-1/3">{{ $staffShift->end_date }}</p>
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="w-full md:w-1/3 flex gap-x-2">
+                            <div class="font-semibold md:hidden">Company:</div>
+                            {{ $staffShift->company }}
+                        </div>
+
+                        <div class="w-full md:w-1/3 flex gap-x-2">
+                            <div class="md:hidden font-semibold">Sarting:</div>
+                            {{ $staffShift->start_date }}
+                        </div>
+
+                        <div class="w-full md:w-1/3 flex gap-x-2">
+                            <div class="font-semibold md:hidden">Ending:</div>
+                            {{ $staffShift->end_date }}
+                        </div>
                         {{-- <p class="w-1/4 h-full">Cancel Shift</p> --}}
                     </div>
                 </div>
 
-                @if ($staffShift->as_planned && auth()->user()->is_admin)
-                    <div wire:click="cancelShift({{ $staffShift->shiftId }})"
-                        class="hover:bg-red-600 cursor-pointer bg-red-500 text-white p-1 text-xs rounded whitespace-nowrap">
-                        Cancel Shift
-                    </div>
-                @endif
+                <div class="flex md:items-start w-full gap-x-2">
+                    @if ($staffShift->as_planned && auth()->user()->is_admin)
+                        <div wire:click="cancelShift({{ $staffShift->shiftId }})"
+                            class="hover:bg-red-600 cursor-pointer bg-red-500 text-white p-1 text-xs rounded whitespace-nowrap">
+                            Cancel Shift
+                        </div>
+                    @endif
 
-                @if (!$staffShift->as_planned)
-                    <div class="cursor-not-allowed bg-red-300 text-white p-1 text-xs rounded whitespace-nowrap">
-                        Cancelled
-                    </div>
-                @endif
+                    @if (!$staffShift->as_planned)
+                        <div class="cursor-not-allowed bg-red-300 text-white p-1 text-xs rounded whitespace-nowrap">
+                            Cancelled
+                        </div>
+                    @endif
 
-                @if ($staffShift->as_planned)
-                    <div class="cursor-not-allowed bg-green-500 text-white p-1 text-xs rounded whitespace-nowrap">
-                        As Planned
-                    </div>
-                @endif
+                    @if ($staffShift->as_planned)
+                        <div class="cursor-not-allowed bg-green-500 text-white p-1 text-xs rounded whitespace-nowrap">
+                            As Planned
+                        </div>
+                    @endif
+                </div>
             </div>
         @endforeach
     </div>

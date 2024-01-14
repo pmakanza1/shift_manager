@@ -4,11 +4,14 @@ namespace App\Http\Queries;
 
 use App\Models\Staff;
 use App\Models\StaffCompanyTotalHours;
+use Carbon\Carbon;
 
 class StaffHoursQuery
 {
     public static function getStaffHours($startDate, $endDate)
     {
+        $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
+
         $cancelled_shifts = StaffCompanyTotalHours::where('as_planned', 0)
             ->select('staff_id')
             ->selectRaw('sum(total_hours) as cancelled_hours')
@@ -39,6 +42,8 @@ class StaffHoursQuery
 
     public static function getFilteredStaffHours($startDate, $endDate, $searchTerm, $allStaff = false)
     {
+        $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
+
         if ($allStaff) {
             return Staff::where('is_active', 1)
                 ->where(function ($query) use ($searchTerm) {
@@ -59,6 +64,8 @@ class StaffHoursQuery
 
     public static function getStaffHoursForStaffView($staffId, $startDate, $endDate)
     {
+        $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
+        
         $cancelled_shifts = StaffCompanyTotalHours::where('as_planned', 0)
             ->select('staff_id')
             ->selectRaw('sum(total_hours) as cancelled_hours')
