@@ -1,4 +1,4 @@
-<div x-data="{ addCompany: false }" class="px-3 relative">
+<div x-data="{ addCompany: false }" class="px-3">
     <div class="flex items-center justify-between gap-x-2 py-3">
         <div class="w-full">
             <input wire:model.live="searchTerm" name="searchTerm" class="border border-gray-300 rounded w-full"
@@ -15,7 +15,7 @@
 
     <div>
         @if ($company)
-            <div @click.outside="$wire.clearCompanyId" class="absolute inset-x-0 bg-gray-200 shadow-sm p-4 mx-2">
+            <div @click.outside="$wire.clearCompanyId" class="bg-gray-200 shadow-sm p-4">
                 <livewire:company.edit-company :company="$company" />
             </div>
         @endif

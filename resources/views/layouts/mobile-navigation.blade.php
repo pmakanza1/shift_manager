@@ -15,17 +15,35 @@
 
     <div :class="open ? 'block absolute w-full bg-blue-200' : 'hidden'" class="sm:hidden">
         <div class="flex flex-col pt-2 pb-3 space-y-1">
-            <x-nav-link :href="route('staff.show', auth()->user()->staff->staff_id)" :active="request()->routeIs('dashboard')">
-                {{ __('Overview') }}
-            </x-nav-link>
+
+            @if (auth()->user()->is_admin)
+                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Overview') }}
+                </x-nav-link>
+            @else
+                <x-nav-link :href="route('staff.show', auth()->user()->staff->staff_id)" :active="request()->routeIs('dashboard')">
+                    {{ __('Overview') }}
+                </x-nav-link>
+            @endif
+
+
+            @if (auth()->user()->is_admin)
+                <x-nav-link :href="route('companies.show')" :active="request()->routeIs('companies.show')">
+                    {{ __('Companies') }}
+                </x-nav-link>
+
+                <x-nav-link :href="route('companies.index')" :active="request()->routeIs('companies.index')">
+                    {{ __('Company Hours') }}
+                </x-nav-link>
+
+                <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.index')">
+                    {{ __('Staff Hours') }}
+                </x-nav-link>
+            @endif
 
             <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
                 {{ __('Profile') }}
             </x-nav-link>
-
-            {{-- <x-nav-link :href="route('logout')" :active="request()->routeIs('logout')">
-                {{ __('Log out') }}
-            </x-nav-link> --}}
 
             <form
                 class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium 

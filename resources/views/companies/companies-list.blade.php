@@ -6,6 +6,8 @@
             </h2>
         </x-slot>
 
-        <livewire:company.companies-list />
+        <div>
+            <livewire:company.companies-list />
+        </div>
     </div>
 </x-app-layout>

@@ -17,7 +17,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div>
+    <div class="">
         @include('layouts.mobile-navigation')
     </div>
 

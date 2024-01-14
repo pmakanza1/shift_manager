@@ -1,4 +1,8 @@
 <x-app-layout>
+
+    <div class="hidden h-0">
+        <livewire:staff.staff-hours />
+    </div>
    
     {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">

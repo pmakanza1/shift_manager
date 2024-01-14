@@ -17,16 +17,16 @@
                     </x-nav-link>
 
                     @if (auth()->user()->is_admin)
+                        <x-nav-link :href="route('companies.show')" :active="request()->routeIs('companies.show')">
+                            {{ __('Companies') }}
+                        </x-nav-link>
+
                         <x-nav-link :href="route('companies.index')" :active="request()->routeIs('companies.index')">
                             {{ __('Company Hours') }}
                         </x-nav-link>
 
                         <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.index')">
-                            {{ __('Staff') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('companies.show')" :active="request()->routeIs('companies.show')">
-                            {{ __('Companies') }}
+                            {{ __('Staff Hours') }}
                         </x-nav-link>
                     @endif
 

@@ -8,7 +8,7 @@
         </div>
     @endif
 
-    <div class="text-center border border-gray-50 bg-gray-300 font-medium py-1">{{ $company->name }}</div>
+    <div class="text-center border border-gray-50 bg-gray-300 font-medium py-1">Update {{ $company->name }} Company Data</div>
 
     @if ($errors->any())
         <div class="text-red-500">
