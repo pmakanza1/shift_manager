@@ -13,23 +13,23 @@ class StaffHoursQuery
         $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
 
         $cancelled_shifts = StaffCompanyTotalHours::where('as_planned', 0)
-            ->select('staff_id')
+            ->select('user_id')
             ->selectRaw('sum(total_hours) as cancelled_hours')
             ->whereBetween('start_date', [$startDate, $endDate])
-            ->groupBy('staff_id');
+            ->groupBy('user_id');
 
         $active_shifts = StaffCompanyTotalHours::where('as_planned', 1)
-            ->select('staff_id')
+            ->select('user_id')
             ->selectRaw('sum(total_hours) as hours_worked, sum(total_hours * rate) as active_hours')
             ->whereBetween('start_date', [$startDate, $endDate])
-            ->groupBy('staff_id');
+            ->groupBy('user_id');
 
-        return Staff::leftJoin('staff_company_total_hours AS scth', 'scth.staff_id', 'staff.staff_id')
+        return Staff::leftJoin('staff_company_total_hours AS scth', 'scth.user_id', 'staff.staff_id')
             ->leftJoinSub($cancelled_shifts, 'cancelled_shifts', function ($join) {
-                $join->on('cancelled_shifts.staff_id', '=', 'staff.staff_id');
+                $join->on('cancelled_shifts.user_id', '=', 'staff.staff_id');
             })
             ->leftJoinSub($active_shifts, 'active_shifts', function ($join) {
-                $join->on('active_shifts.staff_id', '=', 'staff.staff_id');
+                $join->on('active_shifts.user_id', '=', 'staff.staff_id');
             })
             ->select('staff.staff_id', 'staff.name', 'staff.email', 'staff.phone', 'cancelled_shifts.cancelled_hours')
             ->selectRaw('
@@ -67,13 +67,13 @@ class StaffHoursQuery
         $endDate = Carbon::parse($endDate)->endOfDay()->toDateTimeString();
         
         $cancelled_shifts = StaffCompanyTotalHours::where('as_planned', 0)
-            ->select('staff_id')
+            ->select('user_id')
             ->selectRaw('sum(total_hours) as cancelled_hours')
-            ->groupBy('staff_id');
+            ->groupBy('user_id');
 
-        return Staff::leftJoin('staff_company_total_hours AS scth', 'scth.staff_id', 'staff.staff_id')
+        return Staff::leftJoin('staff_company_total_hours AS scth', 'scth.user_id', 'staff.staff_id')
             ->leftJoinSub($cancelled_shifts, 'cancelled_shifts', function ($join) {
-                $join->on('cancelled_shifts.staff_id', '=', 'staff.staff_id');
+                $join->on('cancelled_shifts.user_id', '=', 'staff.staff_id');
             })
             ->join('companies', 'companies.id', 'scth.company_id')
             ->join('shift_types', 'shift_types.id', 'scth.shift_type_id')

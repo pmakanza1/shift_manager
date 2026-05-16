@@ -93,7 +93,7 @@ class AssignShifts extends Component
         $to = Carbon::today()->addMonth();
 
         $potentialClashes = StaffCompanyTotalHours::whereBetween('start_date', [$from, $to])
-            ->where('staff_id', $this->staff->staff_id)
+            ->where('user_id', $this->staff->staff_id)
             ->where('as_planned', 1)
             ->get();
 
@@ -209,7 +209,7 @@ class AssignShifts extends Component
     {
         StaffCompanyTotalHours::create(
             [
-                'staff_id' => $this->staff->staff_id,
+                'user_id' => $this->staff->staff_id,
                 'company_id' => $this->company,
                 'shift_type_id' => $this->shiftType,
                 'start_date' => $this->startDateTime,

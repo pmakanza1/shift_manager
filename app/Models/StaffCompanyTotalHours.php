@@ -10,7 +10,7 @@ class StaffCompanyTotalHours extends Model
     use HasFactory;
 
     protected $fillable = [
-        'staff_id',
+        'user_id',
         'company_id',
         'shift_type_id',
         'start_date',
