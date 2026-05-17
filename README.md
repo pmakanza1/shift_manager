@@ -114,6 +114,17 @@ The application should now be available at:
 http://127.0.0.1:8000
 ```
 
+## Screenshots
+![Companies List](sm_screenshots/companiesList.png)
+
+![Updating Company Details](sm_screenshots/edit_update_company.png)
+
+![Company Search](sm_screenshots/searchCompany.png)
+
+![Staff Rota](sm_screenshots/staff_rota.png)
+
+![Assign Shift](sm_screenshots/successfully_asigned_shift.png)
+
  ## Author
 
 Built by Panashe Makanza.
